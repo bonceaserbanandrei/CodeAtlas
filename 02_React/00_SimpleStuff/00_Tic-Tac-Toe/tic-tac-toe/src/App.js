@@ -1,18 +1,20 @@
-// import useState to be able to manage state in the components
 import {useState} from "react";
-// import App.css to add styles to the App
 import './App.css';
 
-function Square({value, onSquareClick}) {
-  /**
-   * React component for the playable Squares.
-   * @param {char} value - Either 'X' or 'O'.
-   * @param {function} onSquareClick - Function to be triggered on the OnClick event handler.
-   * @returns {button} The final component for the playable Squares. 
-   */
+function Square({value, onSquareClick, winSquares, index, drawFlag}) {
+
+  let winSquare = false;
+  if (winSquares.includes(index)) {
+    winSquare = true;
+  }
+
+  const classForThisSquare = winSquare ?
+  'win_square' : drawFlag ?
+  'draw_square' : 'square' 
+
   return (
     <button 
-      className="square"
+      className={classForThisSquare}
       onClick={onSquareClick}
     >
       {value}
@@ -21,123 +23,148 @@ function Square({value, onSquareClick}) {
 }
 
 function Board({xIsNext, squares, onPlay}) {
-  // function for the Tic-Tac-Toe board
-
-  // the winner property is to track the winner (the value returned by the calculateWinner() function)
-  const winner = calculateWinner(squares);
-  // status is used to display important information to the players (i.e. who won, whose turn it is)
+  const {winner, winIndexes} = calculateWinner(squares);
   let status;
+  const board_content=[];
 
-  // basic if statement to check if there was a winner or if the game is still in progress
+  let anyNull = val => val === null;
+  let filteredSquares = squares.filter(anyNull);
+  let drawFlag = false;
+
   if (winner) {
     status = "Winner: " + winner;
+  } else if(filteredSquares.length === 0) {
+    status = "Draw!";
+    drawFlag = true;
   } else {
     status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
   function handleClick(i) {
-    // function used for handling the clicking of squares on the board
-    // it takes i as the parameter for the index of the square that was clicked
-    // will be passed as the onSquareClick prop to the onClick event handler
 
-    // if the square we want to insert into already has a value
-    // OR
-    // if there is already a winner
-    // => we exit the function early
+    const allCoords = [
+      [1,1],
+      [1,2],
+      [1,3],
+      [2,1],
+      [2,2],
+      [2,3],
+      [3,1],
+      [3,2],
+      [3,3]
+    ]
+    const moveCoords = allCoords[i];
+    
     if (squares[i] || winner) {
       return;
     }
 
-    // nextSquares is the array containing the values for the squares on the board
     const nextSquares = squares.slice();
-    // basic if statement to check whose turn it is so we know what to insert in the clicked square
+
     if (xIsNext) {
       nextSquares[i] = "X";
     } else {
       nextSquares[i] = "O";
     }
-    // handler for the insertion of the symbol in the desired square
-    onPlay(nextSquares);
+    const moveSymbol = nextSquares[i];
+    onPlay(nextSquares, moveCoords, moveSymbol);
+  }
+
+  for (let i=0;i<=6;i+=3) {
+    let row_content=[];
+    for (let j=0;j<3;j++)
+      {
+        row_content.push(<Square 
+          value={squares[j+i]}
+          onSquareClick={() => handleClick(j+i)}
+          key={j+i}
+          winSquares={winIndexes}
+          index={j+i}
+          drawFlag={drawFlag}
+          />);
+      }
+    board_content.push(<div className="board-row" key={i}>{row_content}</div>);
   }
 
   return (
-    // we define what the Board() function returns -> the actual Tic-Tac-Toe board components
-    // below, when displaying the Square components we pass several props:
-    // - the square which would be modified (the squares[index])
-    // - an arrow function that calls handleClick with the index to be modified as a parameter
     <>
       <div className="status">{status}</div>
-      <div className="board-row">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-      </div>
-      <div className="board-row">
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-      </div>
+      {board_content}
     </>
   );
 }
 
 export default function Game() {
-  // main function for the Tic-Tac-Toe game
-  // the history property is to track the game history
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  // current move
+
+  const [history, setHistory] = useState({
+    square_history: [Array(9).fill(null)],
+    symbolsHistory: Array(9).fill(null),
+    coordHistory: Array(9).fill(null)
+  })
+  
   const [currentMove, setCurrentMove] = useState(0);
-  // variable to store the current moves
-  const currentSquares = history[currentMove];
-  // the xIsNext property is to track whose turn it is
+  
+  const [isAscending, setIsAscending] = useState(true);
+
+  const currentSquares = history.square_history[currentMove];
+
   const xIsNext = currentMove % 2 === 0;
   
-  function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
-    setCurrentMove(nextHistory.length-1);
+  function handlePlay(nextSquares, moveCoords, moveSymbol) {
+
+    const nextHistoryObject = {
+      square_history: [...history.square_history.slice(0, currentMove + 1), nextSquares],
+      symbolsHistory: [...history.symbolsHistory.slice(0, currentMove + 1), moveSymbol],
+      coordHistory: [...history.coordHistory.slice(0, currentMove + 1), moveCoords]
+    }
+    setHistory({
+      square_history: nextHistoryObject.square_history,
+      symbolsHistory: nextHistoryObject.symbolsHistory,
+      coordHistory: nextHistoryObject.coordHistory
+    });
+
+    setCurrentMove(nextHistoryObject.square_history.length-1);
+
   }
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = 'Go to move #' + move;
-    } else {
-      description = 'Go to game start';
-    }
+  const moves = history.square_history.map((squares, move) => {
+
+    const description = move > 0 ? `Go to move #${move} - ${history.symbolsHistory[move]} at [${history.coordHistory[move]}]` : 'Go to game start';
 
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        {move === currentMove ? (
+          <>You are on move #{currentMove}</>
+        ):(
+          <button onClick={() => jumpTo(move)}>{description}</button>
+        )}
       </li>
     );
-  });
-
+  }); 
+  
+  const sortedMoves = isAscending ? moves : moves.slice().reverse();
+ 
   return (
     <div className="game">
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <button className="sort_button" onClick={() => setIsAscending(!isAscending)}>
+          {isAscending ? 'Sort Moves Descending' : 'Sort Moves Ascending'}
+        </button>
+        <ol reversed={!isAscending} start={isAscending ? 0 : currentMove}>{sortedMoves}</ol>
       </div>
+      
     </div>
   )
 }
 
 function calculateWinner(squares) {
-  // function that computes the winner
-
-  // the lines variable contains the 'key' of all the possible square combinations for a win-check 
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -151,10 +178,11 @@ function calculateWinner(squares) {
   for (let i=0;i<lines.length;i++) {
     const [a,b,c] = lines[i];
     if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      // if we have a value on squares[a] and it is equal to squares[b] and squares[c] we return the symbol on square[a] (the winning symbol)
-      return squares[a];
+      return {
+        "winner":squares[a],
+        "winIndexes": [a,b,c]
+      };
     }
   }
-  // otherwise return null (no winner - yet)
-  return null;
+  return { winner: null, winIndexes: [] };
 }
