@@ -18,3 +18,5 @@ CMakeLists.txt linguist-language=Plaintext
 
 # Treat Swift files as Plaintext (ignores them for language detection)
 *.swift linguist-language=Plaintext
+
+*.java linguist-language=Plaintext
