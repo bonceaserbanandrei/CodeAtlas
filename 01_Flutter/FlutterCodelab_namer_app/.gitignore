@@ -1,14 +1,4 @@
 # Miscellaneous
-*.cmake
-*.cpp
-*.hpp
-*.cc
-*.cxx
-*.hxx
-*.c++
-*.h++
-*.h
-*.c
 *.class
 *.log
 *.pyc

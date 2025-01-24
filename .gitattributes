@@ -1,0 +1,13 @@
+# Treat C++ files as Plaintext (ignores them for language detection)
+*.cpp linguist-language=Plaintext
+*.h linguist-language=Plaintext
+*.hpp linguist-language=Plaintext
+*.cc linguist-language=Plaintext
+*.cxx linguist-language=Plaintext
+*.hxx linguist-language=Plaintext
+*.inl linguist-language=Plaintext
+
+# Treat CMake files as Plaintext (ignores them for language detection)
+CMakeLists.txt linguist-language=Plaintext
+*.cmake linguist-language=Plaintext
+*.cma linguist-language=Plaintext
