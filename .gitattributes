@@ -11,3 +11,10 @@
 CMakeLists.txt linguist-language=Plaintext
 *.cmake linguist-language=Plaintext
 *.cma linguist-language=Plaintext
+
+# Treat Kotlin files as Plaintext (ignores them for language detection)
+*.kt linguist-language=Plaintext
+*.kts linguist-language=Plaintext
+
+# Treat Swift files as Plaintext (ignores them for language detection)
+*.swift linguist-language=Plaintext
