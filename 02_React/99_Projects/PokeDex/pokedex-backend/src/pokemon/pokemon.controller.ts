@@ -5,8 +5,13 @@ import { PokemonService } from './pokemon.service';
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
-  @Get(':id')
+  @Get('all')
+  getPokemonList() {
+    return this.pokemonService.getPokemonList();
+  }
+
+ /*  @Get(':id')
   getPokemonById(@Param('id') id: string) {
     return this.pokemonService.getPokemonById(+id);
-  }
+  } */
 }
