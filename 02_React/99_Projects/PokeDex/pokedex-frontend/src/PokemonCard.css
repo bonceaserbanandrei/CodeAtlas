@@ -1,0 +1,30 @@
+.pokemon-card {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    background-color: #f8f8f8;
+    width: 250px;
+    margin: auto;
+  }
+  
+  .pokemon-card h2 {
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    color: #ff5733;
+  }
+  
+  .pokemon-card p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .pokemon-card img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+  }
+
+  .pokemon-card strong {
+    font-style: italic;
+  }
