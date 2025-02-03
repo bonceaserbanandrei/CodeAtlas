@@ -13,7 +13,7 @@ const App = () => {
 
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
-      <h1>Pokédex</h1>
+      <h1>PokéDex</h1>
       <div style={{ marginBottom: "20px" }}>
         <input
           type="text"

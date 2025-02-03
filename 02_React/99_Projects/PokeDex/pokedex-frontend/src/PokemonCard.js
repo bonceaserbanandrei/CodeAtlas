@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './PokemonCard.css';
+
+const apiURL = window.location.hostname === 'localhost'
+? 'http://localhost:3000'
+: `http://${window.location.hostname}:3000`;
 
 const PokemonCard = ({ id }) => {
   const [pokemon, setPokemon] = useState(null);
@@ -11,7 +16,7 @@ const PokemonCard = ({ id }) => {
     setError(null);
     setPokemon(null);
     axios
-    .get(`http://localhost:3000/pokemon/${id}`)
+    .get(`${apiURL}/pokemon/?id=${id}`)
     .then((response) => {
         setPokemon(response.data);
         setLoading(false);
@@ -24,12 +29,13 @@ const PokemonCard = ({ id }) => {
   }, [id]);
 
   if (loading) return <p>Loading...</p>;
+  if (!pokemon) return <p>No Pokémon found. Try a different ID or name!</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!pokemon) return <p>No Pokémon found. Try a different ID!</p>;
+  
 
   return (
-    <div style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-      <h2 style={{ textTransform: "capitalize" }}>{pokemon.name}</h2>
+    <div className='pokemon-card'>
+      <h2>{pokemon.name}</h2>
       <img src={pokemon.sprites.front_default} alt={pokemon.name} />
       <p>
         <strong>Type:</strong>{" "}
