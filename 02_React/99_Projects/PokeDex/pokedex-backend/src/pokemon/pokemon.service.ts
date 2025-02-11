@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import axios from 'axios';
+import * as Fuse from 'fuse.js';
 
 @Injectable()
 export class PokemonService implements OnModuleInit {
@@ -74,5 +75,43 @@ export class PokemonService implements OnModuleInit {
         console.log("Cache expired or empty. Reloading data...");
         return await this.loadAllPokemon();
     }
+  }
+
+  async searchPokemon(query: string) {
+    /* if (!search) return this.cachedPokemonData;
+
+    const lowercasedSearch = search.toLowerCase();
+
+    if (this.cachedPokemonData[lowercasedSearch]) {
+      return this.cachedPokemonData[lowercasedSearch];
+    }
+    
+    const searchIsId = Object.values(this.cachedPokemonData).find(
+      (pokemon) => pokemon.id === Number(search)
+    );
+    if (searchIsId) {
+      return searchIsId;
+    } */
+    if (!this.cachedPokemonData || Object.keys(this.cachedPokemonData).length === 0) {
+      throw new Error('Pokémon data is not loaded yet.');
+    }
+
+    const pokemonArray = Object.values(this.cachedPokemonData);
+
+    if (!isNaN(Number(query))) {
+      const foundById = pokemonArray.find(pokemon => pokemon.id === Number(query));
+      if (foundById) {
+        console.log(`Found Pokemon by ID: ${query}`);
+        return foundById;
+      }
+    }
+
+    const foundByName = pokemonArray.find(pokemon => pokemon.name === query);
+    if (foundByName) {
+      console.log(`Found Pokemon by Name: ${query}`);
+      return foundByName;
+    }
+
+    return {error: "No Pokemon found"};
   }
 }

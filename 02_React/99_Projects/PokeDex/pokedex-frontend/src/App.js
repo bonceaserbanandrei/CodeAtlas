@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import PokemonCard from "./PokemonCard";
+import PokemonCard from "./components/PokemonCard";
 
 const App = () => {
   const [pokemonId, setPokemonId] = useState(""); // Store the current Pokémon ID
-  const [searchId, setSearchId] = useState(null); // Store the ID to display
+  const [searchQuery, setSearchQuery] = useState(null); // Store the ID to display
 
   const handleSearch = () => {
     if (pokemonId.trim()) {
-      setSearchId(pokemonId.trim());
+      setSearchQuery(pokemonId.trim());
     }
   };
 
@@ -43,8 +43,8 @@ const App = () => {
           Search
         </button>
       </div>
-      {searchId ? (
-        <PokemonCard id={searchId} />
+      {searchQuery ? (
+        <PokemonCard query={searchQuery} />
       ) : (
         <p>Enter a Pokémon ID or name to search!</p>
       )}
