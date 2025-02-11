@@ -6,7 +6,7 @@ const apiURL = window.location.hostname === 'localhost'
 ? 'http://localhost:3000'
 : `http://${window.location.hostname}:3000`;
 
-const PokemonCard = ({ id }) => {
+const PokemonCard = ({ name }) => {
   const [pokemon, setPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ const PokemonCard = ({ id }) => {
     setError(null);
     setPokemon(null);
     axios
-    .get(`${apiURL}/pokemon/?id=${id}`)
+    .get(`${apiURL}/pokemon/?name=${name}`)
     .then((response) => {
         setPokemon(response.data);
         setLoading(false);
@@ -26,10 +26,10 @@ const PokemonCard = ({ id }) => {
         setError("Failed to fetch Pokémon data. Please try again.");
         setLoading(false);
     });
-  }, [id]);
+  }, [name]);
 
   if (loading) return <p>Loading...</p>;
-  if (!pokemon) return <p>No Pokémon found. Try a different ID or name!</p>;
+  if (!pokemon) return <p>No Pokémon found. Try a different name!</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   
 
