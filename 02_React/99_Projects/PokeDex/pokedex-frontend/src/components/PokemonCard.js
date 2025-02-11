@@ -29,7 +29,7 @@ const PokemonCard = ({ query }) => {
   }, [query]);
 
   if (loading) return <p>Loading...</p>;
-  if (!pokemon) return <p>No Pokémon found. Try a different name!</p>;
+  if (pokemon.error) return <p>No Pokémon found. Try a different name!</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   
 
