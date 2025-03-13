@@ -1,4 +1,4 @@
-import { Controller, Get} from '@nestjs/common';
+import { Controller, Get, Query} from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
 
 @Controller('pokemon')
@@ -7,6 +7,11 @@ export class PokemonController {
 
   @Get('')
   getAllPokemon() {
-  return this.pokemonService.getAllPokemon();
+    return this.pokemonService.getAllPokemon();
+  }
+
+  @Get('search')
+  getSpecificPokemon(@Query('q') query: string) {
+    return this.pokemonService.searchPokemon(query);
   }
 }

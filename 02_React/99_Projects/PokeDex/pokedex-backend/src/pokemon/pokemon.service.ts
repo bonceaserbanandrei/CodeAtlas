@@ -75,4 +75,28 @@ export class PokemonService implements OnModuleInit {
         return await this.loadAllPokemon();
     }
   }
+
+  async searchPokemon(query: string) {
+    if (!this.cachedPokemonData || Object.keys(this.cachedPokemonData).length === 0) {
+      throw new Error('Pokémon data is not loaded yet.');
+    }
+
+    const pokemonArray = Object.values(this.cachedPokemonData);
+
+    if (!isNaN(Number(query))) {
+      const foundById = pokemonArray.find(pokemon => pokemon.id === Number(query));
+      if (foundById) {
+        console.log(`Found Pokemon by ID: ${query}`);
+        return foundById;
+      }
+    }
+
+    const foundByName = pokemonArray.find(pokemon => pokemon.name === query);
+    if (foundByName) {
+      console.log(`Found Pokemon by Name: ${query}`);
+      return foundByName;
+    }
+
+    return {error: "No Pokemon found"};
+  }
 }
