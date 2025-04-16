@@ -1,19 +1,16 @@
 
 .pokedex_container {
+    font-family: 'Press Start 2P', cursive;
     width: 90%;
-    max-width: 900px;
-    background: rgb(208, 85, 85);
+    max-width: 1024px;
+    background: var(--container-color);
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
     text-align: center;
     justify-content: center;
     align-items: center;
-}
-
-.title img {
-    max-width: 250px;
-    width: 100%;
+    color: var(--title-color);
 }
 
 .card-list {
@@ -25,4 +22,9 @@
     margin-block-end: 0px;
     align-items: center;
     justify-content: center;
+}
+
+#open_filters {
+    display: block;
+    margin: 20px auto auto;
 }

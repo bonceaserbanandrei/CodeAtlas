@@ -9,7 +9,7 @@ export class PokemonService implements OnModuleInit {
 
   // CACHING VARIABLES
   private cacheTimestamp: number | null = null;
-  private readonly CACHE_EXPIRY_TIME = 600000; // currently 10 minutes
+  private readonly CACHE_EXPIRY_TIME = 3600000; // currently 60 minutes
 
   async onModuleInit() {
     console.log("🔄 Preloading Pokémon data...");

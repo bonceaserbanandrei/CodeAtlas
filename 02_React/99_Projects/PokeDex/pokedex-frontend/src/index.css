@@ -1,23 +1,35 @@
+* {
+  box-sizing: border-box;
+}
+
 html {
+  /* Body */
   --bgcolor: #ffffff;
+  /* Container */
+  --container-color: #C43F3F;
+  /* Pokemon Card */
+  --card-bg-color: #FDFBD4;
+  --title-color: #000;
+  --id-color: #424242;
 }
 
 html[data-theme=dark] {
-  --bgcolor: #323232;
+  /* Body */
+  --bgcolor: #333333;
+  /* Container */
+  --container-color: #462F2F;
+  /* Pokemon Card */
+  --card-bg-color: #333333;
+  --title-color: #fff;
+  --id-color: #909090;
 }
 
 body {
   font-family: Arial, sans-serif;
   background-color: var(--bgcolor);
-  /* background-color: #323232; */
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
