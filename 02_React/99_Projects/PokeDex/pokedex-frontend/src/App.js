@@ -1,5 +1,8 @@
 import React, { useState, useEffect} from "react";
 import PokemonCard from "./components/PokemonCard";
+import LogoHeader from "./components/LogoHeader";
+import SearchBar from "./components/SearchBar";
+import TypeFilters from "./components/TypeFilters";
 import '../src/styles/App.css';
 import axios from "axios";
 
@@ -44,7 +47,7 @@ export default function PokeDex() {
       : [...prevFilters, typeFilter]
     );
   }
-  
+
   useEffect(() => {
     const delayTimeout = setTimeout(() => {
       setDebouncedSearch(userSearch);
@@ -87,23 +90,20 @@ export default function PokeDex() {
 
   return (
     <>
+      <input type="checkbox" name="data-theme" onClick={changeTheme}/>
       <div className="pokedex_container">
-        <div className="title">
-          <img src="pokedex.png" alt="PokéDex"></img>
-        </div>
-        <input type="checkbox" name="data-theme" onClick={changeTheme}/>
-        <input
-          type="text"
-          placeholder="Enter Pokémon ID or Name"
-          value={userSearch}
-          onChange={handleInputChange}
-        />       
+        <LogoHeader /> 
         <p>Enter a Pokémon ID or name to search!</p>
+        <SearchBar searchContent={userSearch} inputChangeHandler={handleInputChange}/>
+        <br></br>
+        <TypeFilters />
+        {/* Type filter buttons */}
         {allTypes.map((type) => (
           <button key={type} onClick={() => handleFilter(type)}>{type}</button> 
         ))}
         <button onClick={() => setFilter([])}>Clear Filters</button>
         <hr></hr>
+        {/* Pokemon display */}
         <ul className="card-list">{displayedPokemon.map((pokemon) => (
           <li key={pokemon.id}><PokemonCard key={pokemon.id} pokemonQuery={pokemon} /></li>
         ))}
